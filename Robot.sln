@@ -7,7 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robot.UnitTests", "Robot.Un
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Robot", "Robot\Robot.csproj", "{AAADB4F5-6CDB-4133-8DD3-63D23FB83A14}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robot.ConsoleApp", "Robot.ConsoleApp\Robot.ConsoleApp.csproj", "{26DB37BD-C1DC-47D5-8E47-A03D180FDECF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Robot.ConsoleApp", "Robot.ConsoleApp\Robot.ConsoleApp.csproj", "{26DB37BD-C1DC-47D5-8E47-A03D180FDECF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A781469E-5AC4-4404-AB79-A79B0ADB047B}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
