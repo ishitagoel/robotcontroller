@@ -4,30 +4,44 @@ namespace Robot.ConsoleApp
 {
     class Program
     {
-        private static ConsoleColor _infoColor = ConsoleColor.Cyan;
-        private static ConsoleColor _inputColor = ConsoleColor.White;
-
         static void Main(string[] args)
         {
-            Console.ForegroundColor = _infoColor;
-            Console.WriteLine(@"
+            //welcome user
+            Highlight(@"
 Hi! I am Gridomatic the Robot. I can walk on any 2-dimensional grid. 
 You can control my movement.
 
-");
-            Console.ForegroundColor = _inputColor;
-            var grid = ReadGridDimensions();
+");            
+            //take grid dimensions from user
+            var grid = GetGridDimensions();
 
-            Console.ForegroundColor = _infoColor;
-            Console.Write(@"
-Great! You have configured me to walk on a grid of size {0} * {1}.
-", grid.Rows, grid.Columns);
+            Highlight(String.Format(@"
+You have configured me to walk on a grid of size {0} * {1}.
+", grid.Rows, grid.Columns));
 
-            Console.ForegroundColor = _inputColor;
+            //take starting location from user
+            var cell = GetStartingLocation(grid);
+
+            Highlight(String.Format(@"
+You have configured my starting location as [{0}, {1}].
+", cell.Row, cell.Column));
+        }
+
+        /*
+         * Writes to console with highlighted text
+         */
+        private static void Highlight(string value)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(value);
+            Console.ForegroundColor = ConsoleColor.White;
 
         }
 
-        private static Grid ReadGridDimensions()
+        /*
+         * Returns a grid of dimensions specified by the user in terms of number of rows and columns.         
+         */
+        private static Grid GetGridDimensions()
         {
             int rows=0;
             while(rows==0)
@@ -51,6 +65,32 @@ Great! You have configured me to walk on a grid of size {0} * {1}.
             }
             
             return new Grid(rows, columns);            
+        }
+
+        private static Cell GetStartingLocation(Grid grid)
+        {
+            int row = 0;
+            while (row == 0)
+            {
+                Console.Write("? Please enter the row index of my starting location: ");
+                if (!int.TryParse(Console.ReadLine(), out row) || row <= 0 || row>grid.Rows)
+                {
+                    Console.WriteLine("Error: Row index must be an integer between 1 and {0}.", grid.Rows);
+                    row = 0;
+                }
+            }
+            int column = 0;
+            while (column == 0)
+            {
+                Console.Write("? Please enter the number of columns in the grid: ");
+                if (!int.TryParse(Console.ReadLine(), out column) || column <= 0 || column>grid.Columns)
+                {
+                    Console.WriteLine("Error: Column index must be an integer between 1 and {0}.", grid.Columns);
+                    column = 0;
+                }
+            }
+
+            return new Cell(row, column);
         }
     }
 }
