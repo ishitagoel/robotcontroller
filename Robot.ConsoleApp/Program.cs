@@ -16,15 +16,22 @@ You can control my movement.
             var grid = GetGridDimensions();
 
             Highlight(String.Format(@"
-You have configured me to walk on a grid of size {0} * {1}.
+You have configured me to walk on a grid of size ({0} * {1}).
 ", grid.Rows, grid.Columns));
 
             //take starting location from user
             var cell = GetStartingLocation(grid);
 
             Highlight(String.Format(@"
-You have configured my starting location as [{0}, {1}].
+You have configured my starting location as ({0}, {1}).
 ", cell.Row, cell.Column));
+
+            //take starting direction from user
+            var direction = GetStartingDirection();
+
+            Highlight(String.Format(@"
+You have configured my starting direction as ({0}).
+", direction));
         }
 
         /*
@@ -95,6 +102,22 @@ You have configured my starting location as [{0}, {1}].
             }
 
             return new Cell(row, column);
+        }
+
+        private static CardinalDirection GetStartingDirection()
+        {
+            CardinalDirection? direction = null;
+            while (direction == null)
+            {
+                Console.Write("? Please enter the my starting direction as North/ South/ East/ West: ");
+                var str = Console.ReadLine().ToLower().Trim();
+                if (str == "n" || str == "north") { direction = CardinalDirection.North; }
+                else if (str == "s" || str == "south") { direction = CardinalDirection.South; }
+                else if (str == "e" || str == "east") { direction = CardinalDirection.East; }
+                else if (str == "w" || str == "west") { direction = CardinalDirection.West; }
+                else Console.WriteLine("Error: Starting direction must be one of North/ South/ East/ West.");               
+            }
+            return (CardinalDirection)direction;
         }
     }
 }
