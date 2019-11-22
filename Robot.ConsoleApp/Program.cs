@@ -8,23 +8,26 @@ namespace Robot.ConsoleApp
         {
             //welcome user
             Highlight(@"
-Hi! I am Gridomatic the Robot. I can walk on any 2-dimensional grid. 
+--------------------------------------------------------------------
+Hi! I am Gridomatic the Robot. I can move on any 2-dimensional grid. 
 You can control my movement.
+Please answer the following questions so that we can get started.
+--------------------------------------------------------------------
 
 ");            
             //take grid dimensions from user
             var grid = GetGridDimensions();
 
             Highlight(String.Format(@"
-You have configured me to walk on a grid of size ({0} * {1}).
+You have configured me to move on a grid of size ({0} * {1}).
 ", grid.Rows, grid.Columns));
 
             //take starting location from user
-            var cell = GetStartingLocation(grid);
+            var currentLocation = GetStartingLocation(grid);
 
             Highlight(String.Format(@"
 You have configured my starting location as ({0}, {1}).
-", cell.Row, cell.Column));
+", currentLocation.Row, currentLocation.Column));
 
             //take starting direction from user
             var direction = GetStartingDirection();
@@ -32,6 +35,45 @@ You have configured my starting location as ({0}, {1}).
             Highlight(String.Format(@"
 You have configured my starting direction as ({0}).
 ", direction));
+
+            Highlight(@"
+---------------------------------------------------------------------
+Great! I am now ready to start moving. 
+Before each move, I shall ask you where to go. 
+You can tell me to go left (L)/ right (R)/ forward (F)/ back (B).  
+Or press ESC key to stop.
+---------------------------------------------------------------------
+
+");
+
+            while (true)
+            {
+                RelativeDirection? move = GetNextMove();
+                if (move == null) {
+                    Highlight(@"
+--------------------------------------------------------------------
+I'm done for the day. Good bye!
+--------------------------------------------------------------------
+");
+                    break; 
+                }
+                var moveTo = grid.AdjacentTo(currentLocation, direction, (RelativeDirection)move);
+                if(moveTo!=null)
+                {
+                    currentLocation = (Cell)moveTo;
+                    Highlight(String.Format(@"
+
+I have moved to ({0}, {1}) facing ({2}).
+", 
+                        currentLocation.Row, currentLocation.Column, direction));
+                }
+                else
+                {
+                    Console.WriteLine(@"
+Error: I'm falling off the grid! Please try another move.
+");
+                }
+            }
         }
 
         /*
@@ -53,7 +95,7 @@ You have configured my starting direction as ({0}).
             int rows=0;
             while(rows==0)
             {
-                Console.Write("? Please enter the number of rows in the grid: ");                
+                Console.Write("? Enter the number of rows in the grid: ");                
                 if(!int.TryParse(Console.ReadLine(), out rows) || rows<=0)
                 {
                     Console.WriteLine("Error: Number of rows must be an integer greater than zero.");
@@ -63,7 +105,7 @@ You have configured my starting direction as ({0}).
             int columns = 0;
             while (columns == 0)
             {
-                Console.Write("? Please enter the number of columns in the grid: ");
+                Console.Write("? Enter the number of columns in the grid: ");
                 if (!int.TryParse(Console.ReadLine(), out columns) || columns<=0)
                 {
                     Console.WriteLine("Error: Number of columns must be an integer.");
@@ -83,7 +125,7 @@ You have configured my starting direction as ({0}).
             int row = 0;
             while (row == 0)
             {
-                Console.Write("? Please enter the row index of my starting location: ");
+                Console.Write("? Enter the row index of my starting location: ");
                 if (!int.TryParse(Console.ReadLine(), out row) || row <= 0 || row>grid.Rows)
                 {
                     Console.WriteLine("Error: Row index must be an integer between 1 and {0}.", grid.Rows);
@@ -93,7 +135,7 @@ You have configured my starting direction as ({0}).
             int column = 0;
             while (column == 0)
             {
-                Console.Write("? Please enter the number of columns in the grid: ");
+                Console.Write("? Enter the number of columns in the grid: ");
                 if (!int.TryParse(Console.ReadLine(), out column) || column <= 0 || column>grid.Columns)
                 {
                     Console.WriteLine("Error: Column index must be an integer between 1 and {0}.", grid.Columns);
@@ -109,7 +151,7 @@ You have configured my starting direction as ({0}).
             CardinalDirection? direction = null;
             while (direction == null)
             {
-                Console.Write("? Please enter the my starting direction as North/ South/ East/ West: ");
+                Console.Write("? Enter the my starting direction as North/ South/ East/ West: ");
                 var str = Console.ReadLine().ToLower().Trim();
                 if (str == "n" || str == "north") { direction = CardinalDirection.North; }
                 else if (str == "s" || str == "south") { direction = CardinalDirection.South; }
@@ -118,6 +160,23 @@ You have configured my starting direction as ({0}).
                 else Console.WriteLine("Error: Starting direction must be one of North/ South/ East/ West.");               
             }
             return (CardinalDirection)direction;
+        }
+
+        private static RelativeDirection? GetNextMove()
+        {
+            RelativeDirection? move = null;
+            while (move == null)
+            {
+                Console.Write("? Where should I go next (L/R/F/B): ");
+                var key = Console.ReadKey(false).KeyChar;
+                if (key == (int)ConsoleKey.Escape) { break; }
+                if (key == 'l' || key == 'L') { move = RelativeDirection.Left; }
+                else if (key == 'r' || key == 'R') { move = RelativeDirection.Right; }
+                else if (key == 'f' || key == 'F') { move = RelativeDirection.Forward; }
+                else if (key == 'b' || key == 'B') { move = RelativeDirection.Back; }                
+                else Console.WriteLine("Error: Enter either L or R or F or B, or press ESC to stop.");
+            }
+            return move;
         }
     }
 }
