@@ -117,6 +117,33 @@ namespace RobotController.UnitTests
             var towards = RelativeDirection.Left;
             var left = grid.AdjacentTo(at, facing, towards);
             Assert.IsNull(left);
-        }    
+        }
+
+        [TestMethod]
+        public void Equals_RowsIsDifferent_ReturnsFalse()
+        {
+            int rows = 1, columns = 2;
+            var grid1 = new Grid(rows, columns);
+            var grid2 = new Grid(rows + 1, columns);
+            Assert.IsFalse(grid1.Equals(grid2));
+        }
+
+        [TestMethod]
+        public void Equals_ColumnsIsDifferent_ReturnsFalse()
+        {
+            int rows = 1, columns = 2;
+            var grid1 = new Grid(rows, columns);
+            var grid2 = new Grid(rows, columns + 1);
+            Assert.IsFalse(grid1.Equals(grid2));
+        }
+
+        [TestMethod]
+        public void Equals_RowsColumnsIsSame_ReturnsTrue()
+        {
+            int rows = 1, columns = 2;
+            var grid1 = new Grid(rows, columns);
+            var grid2 = new Grid(rows, columns);
+            Assert.IsTrue(grid1.Equals(grid2));
+        }
     }
 }

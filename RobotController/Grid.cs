@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace RobotController
 {
     /*
      * Represents a 2-dimensional grid
      */
-    public class Grid
+    public class Grid : IEquatable<Grid>
     {
         public int Rows { get; }
         public int Columns { get; }
@@ -23,6 +21,11 @@ namespace RobotController
             }
             Rows = rows;
             Columns = columns;
+        }
+
+        public bool Equals(Grid grid)
+        {
+            return this.Rows == grid.Rows && this.Columns == grid.Columns;
         }
 
         /*

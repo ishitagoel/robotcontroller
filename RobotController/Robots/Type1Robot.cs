@@ -34,7 +34,25 @@ namespace RobotController.Robots
 
         public void Move(RelativeDirection towards)
         {
-            throw new NotImplementedException();        
+            var moveTo = Grid.AdjacentTo(At, Facing, towards);
+
+            if (moveTo == null)
+            {
+                throw new InvalidOperationException("There is no cell to move to.");
+            }
+
+            if (Obstacles.ContainsKey((Cell)moveTo))
+            {
+                var obstacle = Obstacles[(Cell)moveTo];
+                if (obstacle is Rock)
+                {
+                    //do nothing
+                }
+            }
+            else
+            {
+                At = (Cell)moveTo;
+            }
         }
     }
 }
