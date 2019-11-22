@@ -69,13 +69,13 @@ namespace Robot
 
             var i = (int)facing - (int)CardinalDirection.North;
             var j = (int)towards - (int)RelativeDirection.Left;
-            var moveToRow = at.Row + rowDiff[i,j];
-            var moveToColumn = at.Column + columnDiff[i, j];
+            var adjacentRow = at.Row + rowDiff[i,j];
+            var adjacentColumn = at.Column + columnDiff[i, j];
 
-            var moveToCell = new Cell(moveToRow, moveToColumn);
-            if (this.Has(moveToCell))
+            var adjacentCell = new Cell(adjacentRow, adjacentColumn);
+            if (this.Has(adjacentCell))
             {
-                return moveToCell;
+                return adjacentCell;
             }
             return null;
         }
