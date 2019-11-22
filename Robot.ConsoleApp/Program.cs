@@ -64,9 +64,13 @@ You have configured my starting location as [{0}, {1}].
                 }
             }
             
-            return new Grid(rows, columns);            
+            return new Grid(rows, columns);
         }
 
+        /*
+         * Returns starting location of the robot as specified by the user in terms of row index and column index.
+         * (Indices start from 1, not 0)
+         */
         private static Cell GetStartingLocation(Grid grid)
         {
             int row = 0;
