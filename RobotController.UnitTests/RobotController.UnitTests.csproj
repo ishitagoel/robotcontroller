@@ -52,7 +52,7 @@
     <Compile Include="CellTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GridTests.cs" />
-    <Compile Include="RocksTests.cs" />
+    <Compile Include="Type1RobotTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -8,7 +8,7 @@ namespace RobotController
         Grid Grid {get;}
         Cell At { get; }
         CardinalDirection Facing { get; }
-        List<Obstacle> Obstacles { get; }
-        bool Move(RelativeDirection towards);
+        Dictionary<Cell, Obstacle> Obstacles { get; }
+        void Move(RelativeDirection towards);
     }
 }
