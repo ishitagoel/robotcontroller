@@ -46,6 +46,7 @@ Or press ESC key to stop.
 
 ");
 
+            //take series of commands from user to move, for example. Stop when user presses ESC
             while (true)
             {
                 RelativeDirection? move = GetNextMove();
@@ -146,6 +147,9 @@ Error: I'm falling off the grid! Please try another move.
             return new Cell(row, column);
         }
 
+        /*
+         * Returns the starting direction that robot is facing in North/ South/ East/ West, as specified by user 
+         */
         private static CardinalDirection GetStartingDirection()
         {
             CardinalDirection? direction = null;
@@ -162,6 +166,9 @@ Error: I'm falling off the grid! Please try another move.
             return (CardinalDirection)direction;
         }
 
+        /*
+         * Takes a single move command from the user. Either L/R/F/B. Stop if user presses ESC key.
+         */
         private static RelativeDirection? GetNextMove()
         {
             RelativeDirection? move = null;
