@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Robot.ConsoleApp
+namespace RobotController.ConsoleApp
 {
     class Program
     {

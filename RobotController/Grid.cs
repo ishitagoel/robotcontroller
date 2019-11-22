@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Robot
+namespace RobotController
 {
     /*
      * Represents a 2-dimensional grid

@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Robot
+namespace RobotController
 {
     /*
      * Represents a cell [row,column] on a 2-dimensional grid
      */
-    public struct Cell
+    public struct Cell : IEquatable<Cell>
     {
         public int Row { get; }
         public int Column { get; }
@@ -14,6 +14,11 @@ namespace Robot
         {            
             Row = row;
             Column = column;
-        }       
+        }   
+        
+        public bool Equals(Cell cell)
+        {
+            return cell.Row == this.Row && cell.Column == this.Column;
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Robot.UnitTests
+namespace RobotController.UnitTests
 {
     [TestClass]
     public class GridTests

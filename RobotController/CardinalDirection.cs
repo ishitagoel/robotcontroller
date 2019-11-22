@@ -1,4 +1,4 @@
-﻿namespace Robot
+﻿namespace RobotController
 {
     public enum CardinalDirection
     {
