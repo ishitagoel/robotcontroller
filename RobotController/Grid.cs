@@ -47,7 +47,7 @@ namespace RobotController
             /* The two arrays below represent the difference between the row/ column indices
              * of the given cell and the adjacent cell.
              * The rows of these arrays represent the relative directions Left/Right/Forward/Back.
-             * The columns of these arrays represent the cardinal directions North/South/West/East.
+             * The columns of these arrays represent the cardinal directions North/East/South/West.
              * For example, 
              * Grid dimension: 3*3
              * Given cell (at) is the center of the grid [2,2]
@@ -56,22 +56,22 @@ namespace RobotController
              */
             var rowDiff = new int[4, 4]
                 {
-                    {0,0,-1,1},
-                    {0,0,1,-1},
-                    {-1,1,0,0},
-                    {1,-1,0,0}
+                    {0,-1,0,1},
+                    {0,1,0,-1},
+                    {-1,0,1,0},
+                    {1,0,-1,0}
                 };
 
             var columnDiff = new int[4, 4]
             {
-                {-1,1,0,0},
-                {1,-1,0,0},
-                {0,0,-1,1},
-                {0,0,1,-1}
+                {-1,0,1,0},
+                {1,0,-1,0},
+                {0,-1,0,1},
+                {0,1,0,-1}
             };
 
-            var i = (int)facing - (int)CardinalDirection.North;
-            var j = (int)towards - (int)RelativeDirection.Left;
+            var i = (int)towards - (int)RelativeDirection.Left;
+            var j = (int)facing - (int)CardinalDirection.North;            
             var adjacentRow = at.Row + rowDiff[i,j];
             var adjacentColumn = at.Column + columnDiff[i, j];
 

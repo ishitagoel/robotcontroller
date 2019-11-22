@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RobotController.Obstacles
+﻿namespace RobotController.Obstacles
 {
     public class Rock : Obstacle {}
 }

@@ -44,15 +44,23 @@ namespace RobotController.Robots
             if (Obstacles.ContainsKey((Cell)moveTo))
             {
                 var obstacle = Obstacles[(Cell)moveTo];
-                if (obstacle is Rock)
+                //If obstacle is a Hole, go to the cell connected to the hole. Check if the cell is within the grid.
+                if (obstacle is Hole)
                 {
-                    //do nothing
+                    moveTo = ((Hole)obstacle).ConnectedTo;
+                    if (!Grid.Has((Cell)moveTo))
+                    {
+                        throw new InvalidOperationException(
+                            "Moving into a hole that is not connected to a cell within the grid.");
+                    }                    
+                }                
+                else
+                {
+                    return; //if obstacle is a Rock or an unknown type, don't move into the new cell
                 }
             }
-            else
-            {
-                At = (Cell)moveTo;
-            }
+            
+            At = (Cell)moveTo;            
         }
     }
 }
