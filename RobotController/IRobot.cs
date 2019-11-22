@@ -6,9 +6,9 @@ namespace RobotController
     public interface IRobot
     {
         Grid Grid {get;}
-        Cell CurrentCell { get; }
-        CardinalDirection CurrentDirection { get; }
+        Cell At { get; }
+        CardinalDirection Facing { get; }
         List<Obstacle> Obstacles { get; }
-        void Move(RelativeDirection movement);
+        bool Move(RelativeDirection towards);
     }
 }

@@ -23,18 +23,18 @@ You have configured me to move on a grid of size ({0} * {1}).
 ", grid.Rows, grid.Columns));
 
             //take starting location from user
-            var currentLocation = GetStartingLocation(grid);
+            var at = GetStartingLocation(grid);
 
             Highlight(String.Format(@"
 You have configured my starting location as ({0}, {1}).
-", currentLocation.Row, currentLocation.Column));
+", at.Row, at.Column));
 
             //take starting direction from user
-            var direction = GetStartingDirection();
+            var facing = GetStartingDirection();
 
             Highlight(String.Format(@"
 You have configured my starting direction as ({0}).
-", direction));
+", facing));
 
             Highlight(@"
 ---------------------------------------------------------------------
@@ -49,8 +49,8 @@ Or press ESC key to stop.
             //take series of commands from user to move, for example. Stop when user presses ESC
             while (true)
             {
-                RelativeDirection? move = GetNextMove();
-                if (move == null) {
+                RelativeDirection? towards = GetNextMove();
+                if (towards == null) {
                     Highlight(@"
 --------------------------------------------------------------------
 I'm done for the day. Good bye!
@@ -58,15 +58,15 @@ I'm done for the day. Good bye!
 ");
                     break; 
                 }
-                var moveTo = grid.AdjacentTo(currentLocation, direction, (RelativeDirection)move);
+                var moveTo = grid.AdjacentTo(at, facing, (RelativeDirection)towards);
                 if(moveTo!=null)
                 {
-                    currentLocation = (Cell)moveTo;
+                    at = (Cell)moveTo;
                     Highlight(String.Format(@"
 
 I have moved to ({0}, {1}) facing ({2}).
 ", 
-                        currentLocation.Row, currentLocation.Column, direction));
+                        at.Row, at.Column, facing));
                 }
                 else
                 {
