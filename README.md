@@ -9,4 +9,6 @@ The Robot Controller navigates 2-dimensional grids under the user''s commands, a
 3. Go to "Tests" -> "Run All Tests" to verify that all unit tests are successful.
 4. Press F5 to run a simple console app that configures the grid and obstacles, takes a series of commands L/R/F/B from the user and shows the route that the robot takes.
 
+## Design
 
+[UML Class Diagram](./gitignore)
