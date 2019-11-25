@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 
 namespace RobotController.ConsoleApp
 {
@@ -11,37 +12,25 @@ namespace RobotController.ConsoleApp
 --------------------------------------------------------------------
 Hi! I am Gridomatic the Robot. I can move on any 2-dimensional grid. 
 You can control my movement.
-Please answer the following questions so that we can get started.
 --------------------------------------------------------------------
+");
 
-");            
-            //take grid dimensions from user
-            var grid = GetGridDimensions();
+            Console.WriteLine("Reading configuration file...\n");
+            
+            var grid = GetGridSize();                       
+            var at = GetStartLocation(grid);                       
+            var facing = GetStartDirection();
 
-            Highlight(String.Format(@"
-You have configured me to move on a grid of size ({0} * {1}).
-", grid.Rows, grid.Columns));
-
-            //take starting location from user
-            var at = GetStartingLocation(grid);
-
-            Highlight(String.Format(@"
-You have configured my starting location as ({0}, {1}).
-", at.Row, at.Column));
-
-            //take starting direction from user
-            var facing = GetStartingDirection();
-
-            Highlight(String.Format(@"
-You have configured my starting direction as ({0}).
-", facing));
+            Console.WriteLine("\nI'm configured and ready to move.\n");
 
             Highlight(@"
 ---------------------------------------------------------------------
-Great! I am now ready to start moving. 
-Before each move, I shall ask you where to go. 
-You can tell me to go left (L)/ right (R)/ forward (F)/ back (B).  
-Or press ESC key to stop.
+Please command me as follows:
+-- Press L for left
+-- Press R for right
+-- Press F for front
+-- Press B for back
+-- Press ESC to stop
 ---------------------------------------------------------------------
 
 ");
@@ -49,7 +38,7 @@ Or press ESC key to stop.
             //take series of commands from user to move, for example. Stop when user presses ESC
             while (true)
             {
-                RelativeDirection? towards = GetNextMove();
+                RelativeDirection? towards = GetNextCommand();
                 if (towards == null) {
                     Highlight(@"
 --------------------------------------------------------------------
@@ -64,15 +53,13 @@ I'm done for the day. Good bye!
                     at = (Cell)moveTo;
                     Highlight(String.Format(@"
 
-I have moved to ({0}, {1}) facing ({2}).
-", 
-                        at.Row, at.Column, facing));
+I have moved {0} to [{1},{2}] facing {3}.
+",
+                        (RelativeDirection)towards, at.Row, at.Column, facing));
                 }
                 else
                 {
-                    Console.WriteLine(@"
-Error: I'm falling off the grid! Please try another move.
-");
+                    Console.WriteLine(@"\nError: I'm falling off the grid! Please try another move.\n");
                 }
             }
         }
@@ -89,87 +76,73 @@ Error: I'm falling off the grid! Please try another move.
         }
 
         /*
-         * Returns a grid of dimensions specified by the user in terms of number of rows and columns.         
+         * Reads size of grid in terms of number of rows and columns from configuration file.         
          */
-        private static Grid GetGridDimensions()
+        private static Grid GetGridSize()
         {
-            int rows=0;
-            while(rows==0)
-            {
-                Console.Write("? Enter the number of rows in the grid: ");                
-                if(!int.TryParse(Console.ReadLine(), out rows) || rows<=0)
-                {
-                    Console.WriteLine("Error: Number of rows must be an integer greater than zero.");
-                    rows = 0;
-                }              
-            }
-            int columns = 0;
-            while (columns == 0)
-            {
-                Console.Write("? Enter the number of columns in the grid: ");
-                if (!int.TryParse(Console.ReadLine(), out columns) || columns<=0)
-                {
-                    Console.WriteLine("Error: Number of columns must be an integer.");
-                    columns = 0;
-                }
-            }
+            var gridRowCount = ConfigurationManager.AppSettings["GridRowCount"];
+            var gridColumnCount = ConfigurationManager.AppSettings["GridColumnCount"];
             
+            if(!int.TryParse(gridRowCount, out int rows) || rows<=0)
+            {
+                Console.WriteLine("Error: Number of rows must be an integer greater than zero.");
+                Environment.Exit(1);
+            }
+            if (!int.TryParse(gridColumnCount, out int columns) || columns <= 0)
+            {
+                Console.WriteLine("Error: Number of columns must be an integer greater than zero.");
+                Environment.Exit(1);
+            }
+
+            Console.WriteLine("Grid size: {0}*{1}", rows, columns);
             return new Grid(rows, columns);
         }
 
         /*
-         * Returns starting location of the robot as specified by the user in terms of row index and column index.
+         * Returns starting location in terms of row index and column index from configuration file.
          * (Indices start from 1, not 0)
          */
-        private static Cell GetStartingLocation(Grid grid)
+        private static Cell GetStartLocation(Grid grid)
         {
-            int row = 0;
-            while (row == 0)
+            var startRow = ConfigurationManager.AppSettings["StartRow"];
+            var startColumn = ConfigurationManager.AppSettings["StartColumn"];
+            
+            if (!int.TryParse(startRow, out int row) || row <= 0 || row > grid.Rows)
             {
-                Console.Write("? Enter the row index of my starting location: ");
-                if (!int.TryParse(Console.ReadLine(), out row) || row <= 0 || row>grid.Rows)
-                {
-                    Console.WriteLine("Error: Row index must be an integer between 1 and {0}.", grid.Rows);
-                    row = 0;
-                }
+                Console.WriteLine("Error: Start row must be an integer between 1 and {0}.", grid.Rows);
+                Environment.Exit(1);
             }
-            int column = 0;
-            while (column == 0)
+            if (!int.TryParse(startColumn, out int column) || column <= 0 || column > grid.Columns)
             {
-                Console.Write("? Enter the number of columns in the grid: ");
-                if (!int.TryParse(Console.ReadLine(), out column) || column <= 0 || column>grid.Columns)
-                {
-                    Console.WriteLine("Error: Column index must be an integer between 1 and {0}.", grid.Columns);
-                    column = 0;
-                }
+                Console.WriteLine("Error: Start column must be an integer between 1 and {0}.", grid.Columns);
+                Environment.Exit(1);
             }
 
+            Console.WriteLine("Start location: [{0},{1}]", row, column);            
             return new Cell(row, column);
         }
 
         /*
          * Returns the starting direction that robot is facing in North/ South/ East/ West, as specified by user 
          */
-        private static CardinalDirection GetStartingDirection()
+        private static CardinalDirection GetStartDirection()
         {
-            CardinalDirection? direction = null;
-            while (direction == null)
+            var startDirection = ConfigurationManager.AppSettings["StartDirection"];
+            
+            if(!Enum.TryParse(startDirection, out CardinalDirection direction))            
             {
-                Console.Write("? Enter the my starting direction as North/ South/ East/ West: ");
-                var str = Console.ReadLine().ToLower().Trim();
-                if (str == "n" || str == "north") { direction = CardinalDirection.North; }
-                else if (str == "s" || str == "south") { direction = CardinalDirection.South; }
-                else if (str == "e" || str == "east") { direction = CardinalDirection.East; }
-                else if (str == "w" || str == "west") { direction = CardinalDirection.West; }
-                else Console.WriteLine("Error: Starting direction must be one of North/ South/ East/ West.");               
+                Console.WriteLine("Error: Start direction must be one of North/ South/ East/ West.");
+                Environment.Exit(1);
             }
-            return (CardinalDirection)direction;
+
+            Console.WriteLine("Start direction: {0}", direction.ToString());
+            return direction;
         }
 
         /*
          * Takes a single move command from the user. Either L/R/F/B. Stop if user presses ESC key.
          */
-        private static RelativeDirection? GetNextMove()
+        private static RelativeDirection? GetNextCommand()
         {
             RelativeDirection? move = null;
             while (move == null)
@@ -181,7 +154,7 @@ Error: I'm falling off the grid! Please try another move.
                 else if (key == 'r' || key == 'R') { move = RelativeDirection.Right; }
                 else if (key == 'f' || key == 'F') { move = RelativeDirection.Forward; }
                 else if (key == 'b' || key == 'B') { move = RelativeDirection.Back; }                
-                else Console.WriteLine("Error: Enter either L or R or F or B, or press ESC to stop.");
+                else Console.WriteLine("\nError: Enter either L or R or F or B, or press ESC to stop.");
             }
             return move;
         }
