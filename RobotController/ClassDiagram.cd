@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="RobotController.Grid" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAEAAgAAAAAAAAAAAAAAAAAAAAAhAAAA=</HashCode>
+      <FileName>Grid.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="RobotController.Obstacle" Collapsed="true">
+    <Position X="4.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Obstacle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RobotController.Robots.Type1Robot" Collapsed="true">
+    <Position X="1.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAAAIAQAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Robots\Type1Robot.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="RobotController.Obstacles.Hole">
+    <Position X="7.25" Y="2.75" Width="1.5" />
+    <InheritanceLine Type="RobotController.Obstacle" FixedFromPoint="true">
+      <Path>
+        <Point X="5.75" Y="2.812" />
+        <Point X="7.25" Y="2.812" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Obstacles\Hole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RobotController.Obstacles.Rock">
+    <Position X="7.25" Y="1.25" Width="1.5" />
+    <InheritanceLine Type="RobotController.Obstacle" FixedFromPoint="true">
+      <Path>
+        <Point X="5.75" Y="2.812" />
+        <Point X="6.125" Y="2.812" />
+        <Point X="6.125" Y="1.749" />
+        <Point X="7.25" Y="1.749" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Obstacles\Rock.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RobotController.Obstacles.Spinner">
+    <Position X="7.25" Y="4.75" Width="1.5" />
+    <InheritanceLine Type="RobotController.Obstacle" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.75" Y="2.812" />
+        <Point X="6.125" Y="2.812" />
+        <Point X="6.125" Y="5.688" />
+        <Point X="7.25" Y="5.688" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Obstacles\Spinner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="RobotController.Cell" Collapsed="true">
+    <Position X="4.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgABAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Cell.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Struct>
+  <Interface Name="RobotController.IRobot">
+    <Position X="1.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAAAIAQAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IRobot.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Facing" />
+      <Property Name="At" />
+      <Property Name="Grid" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Obstacles" />
+    </ShowAsCollectionAssociation>
+  </Interface>
+  <Enum Name="RobotController.CardinalDirection">
+    <Position X="4.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAABAAQ=</HashCode>
+      <FileName>CardinalDirection.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="RobotController.RelativeDirection">
+    <Position X="4.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAI=</HashCode>
+      <FileName>RelativeDirection.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
