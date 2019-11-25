@@ -53,6 +53,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GridTests.cs" />
     <Compile Include="Type1RobotTests.cs" />
+    <Compile Include="HoleTests.cs" />
+    <Compile Include="SpinnerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
