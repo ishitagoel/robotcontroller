@@ -91,7 +91,8 @@ namespace RobotController.UnitTests
 
             Assert.IsTrue(robot.At.Equals(startAt));
         } 
-        
+         
+        /*
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Move_TowardsAHoleWhoseConnectedCellIsOutsideGrid_ThrowsInvalidOperationException()
@@ -110,10 +111,11 @@ namespace RobotController.UnitTests
 
             //invalid operation when robot encounters the hole
             robot.Move(RelativeDirection.Left);             
-        }
+        }       
+        */
 
         [TestMethod]
-        public void Move_TowardsAHoleWhoseConnectedCellIsWithinGrid_MovesToConnectedCellFacingSame()
+        public void Move_TowardsAHole_MovesToConnectedCellFacingSame()
         {
             Grid grid = new Grid(3, 3);
             var startAt = new Cell(2, 2); //at center
@@ -122,15 +124,15 @@ namespace RobotController.UnitTests
 
             //add a hole to the left connected to a cell within the grid
             var cellWithObstacle = new Cell(2, 1);
-            var cellWithinGrid = new Cell(3, 3);
-            obstacles.Add(cellWithObstacle, new Hole(cellWithinGrid));
+            var connectedCell = new Cell(3, 3);
+            obstacles.Add(cellWithObstacle, new Hole(connectedCell));
 
             var robot = new Type1Robot(grid, startAt, facing, obstacles);
 
             //robot encounters the hole and moves to the connected cell
             //robot direction remains the same
             robot.Move(RelativeDirection.Left);
-            Assert.IsTrue(robot.At.Equals(cellWithinGrid));
+            Assert.IsTrue(robot.At.Equals(connectedCell));
             Assert.IsTrue(robot.Facing.Equals(facing));
         }
 
