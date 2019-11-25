@@ -17,7 +17,23 @@ namespace RobotController.Robots
             if(!grid.Has(startAt))
             {
                 throw new ArgumentOutOfRangeException("startAt", "Start location must be a cell within the grid.");
-            }           
+            } 
+            //Hole obstacles must have connected cells within the grid
+            foreach(var cellWithObstacle in obstacles.Keys)
+            {
+                if(obstacles[cellWithObstacle] is Hole)
+                {
+                    var hole = (Hole)obstacles[cellWithObstacle];
+                    
+                    if(!grid.Has(hole.ConnectedTo))
+                    {
+                        throw new ArgumentOutOfRangeException("obstacles", String.Format(
+                                @"Hole at cell [{0},{1}] is connected to cell [{2},{3}], which is not within the grid boundaries.",
+                                cellWithObstacle.Row,cellWithObstacle.Column,hole.ConnectedTo.Row,hole.ConnectedTo.Column));
+                    }
+                    
+                }
+            }
 
             Grid = grid;
             At = startAt;

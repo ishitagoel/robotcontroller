@@ -91,11 +91,10 @@ namespace RobotController.UnitTests
 
             Assert.IsTrue(robot.At.Equals(startAt));
         } 
-         
-        /*
+            
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void Move_TowardsAHoleWhoseConnectedCellIsOutsideGrid_ThrowsInvalidOperationException()
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Constructor_HoleWithConnectedCellIsOutsideGrid_ThrowsArgumentOutOfRangeException()
         {
             Grid grid = new Grid(3, 3);
             var startAt = new Cell(2, 2); //at center
@@ -107,12 +106,8 @@ namespace RobotController.UnitTests
             var cellOutsideGrid = new Cell(4, 1);
             obstacles.Add(cellWithObstacle, new Hole(cellOutsideGrid)); 
 
-            var robot = new Type1Robot(grid, startAt, facing, obstacles);
-
-            //invalid operation when robot encounters the hole
-            robot.Move(RelativeDirection.Left);             
-        }       
-        */
+            new Type1Robot(grid, startAt, facing, obstacles);                      
+        }               
 
         [TestMethod]
         public void Move_TowardsAHole_MovesToConnectedCellFacingSame()
