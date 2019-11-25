@@ -1,5 +1,7 @@
-﻿using System;
-using System.Configuration;
+﻿using RobotController.Obstacles;
+using RobotController.Robots;
+using System;
+using System.Collections.Generic;
 
 namespace RobotController.ConsoleApp
 {
@@ -15,13 +17,27 @@ You can control my movement.
 --------------------------------------------------------------------
 ");
 
-            Console.WriteLine("Reading configuration file...\n");
-            
-            var grid = GetGridSize();                       
-            var at = GetStartLocation(grid);                       
-            var facing = GetStartDirection();
+            Console.WriteLine(@"I've been configured as follows...
 
-            Console.WriteLine("\nI'm configured and ready to move.\n");
+Grid size: 3*3
+Start location: [2,2]
+Start direction: North
+
+Obstacles:
+    - Hole at location [2,1] connected to [3,3]
+    - Spinner at location [3,3]
+    - Rock at location [3,2]
+");
+
+            var grid = new Grid(3, 3);
+            var startAt = new Cell(2, 2);
+            var facing = CardinalDirection.North;
+            var obstacles = new Dictionary<Cell, Obstacle>();            
+            obstacles.Add(new Cell(2, 1), new Hole(new Cell(3, 3)));           
+            obstacles.Add(new Cell(3, 3), new Spinner(180));            
+            obstacles.Add(new Cell(3, 2), new Rock());
+
+            var robot = new Type1Robot(grid, startAt, facing, obstacles);
 
             Highlight(@"
 ---------------------------------------------------------------------
@@ -47,19 +63,17 @@ I'm done for the day. Good bye!
 ");
                     break; 
                 }
-                var moveTo = grid.AdjacentTo(at, facing, (RelativeDirection)towards);
-                if(moveTo!=null)
-                {
-                    at = (Cell)moveTo;
+                try
+                { 
+                robot.Move((RelativeDirection)towards);                
                     Highlight(String.Format(@"
-
-I have moved {0} to [{1},{2}] facing {3}.
+I'm now at [{0},{1}] facing {2}.
 ",
-                        (RelativeDirection)towards, at.Row, at.Column, facing));
+                        robot.At.Row, robot.At.Column, robot.Facing));
                 }
-                else
+                catch(InvalidOperationException)
                 {
-                    Console.WriteLine(@"\nError: I'm falling off the grid! Please try another move.\n");
+                    Console.WriteLine("\nError: I'm falling off the grid! Please try another move.\n");
                 }
             }
         }
@@ -74,71 +88,7 @@ I have moved {0} to [{1},{2}] facing {3}.
             Console.ForegroundColor = ConsoleColor.White;
 
         }
-
-        /*
-         * Reads size of grid in terms of number of rows and columns from configuration file.         
-         */
-        private static Grid GetGridSize()
-        {
-            var gridRowCount = ConfigurationManager.AppSettings["GridRowCount"];
-            var gridColumnCount = ConfigurationManager.AppSettings["GridColumnCount"];
-            
-            if(!int.TryParse(gridRowCount, out int rows) || rows<=0)
-            {
-                Console.WriteLine("Error: Number of rows must be an integer greater than zero.");
-                Environment.Exit(1);
-            }
-            if (!int.TryParse(gridColumnCount, out int columns) || columns <= 0)
-            {
-                Console.WriteLine("Error: Number of columns must be an integer greater than zero.");
-                Environment.Exit(1);
-            }
-
-            Console.WriteLine("Grid size: {0}*{1}", rows, columns);
-            return new Grid(rows, columns);
-        }
-
-        /*
-         * Returns starting location in terms of row index and column index from configuration file.
-         * (Indices start from 1, not 0)
-         */
-        private static Cell GetStartLocation(Grid grid)
-        {
-            var startRow = ConfigurationManager.AppSettings["StartRow"];
-            var startColumn = ConfigurationManager.AppSettings["StartColumn"];
-            
-            if (!int.TryParse(startRow, out int row) || row <= 0 || row > grid.Rows)
-            {
-                Console.WriteLine("Error: Start row must be an integer between 1 and {0}.", grid.Rows);
-                Environment.Exit(1);
-            }
-            if (!int.TryParse(startColumn, out int column) || column <= 0 || column > grid.Columns)
-            {
-                Console.WriteLine("Error: Start column must be an integer between 1 and {0}.", grid.Columns);
-                Environment.Exit(1);
-            }
-
-            Console.WriteLine("Start location: [{0},{1}]", row, column);            
-            return new Cell(row, column);
-        }
-
-        /*
-         * Returns the starting direction that robot is facing in North/ South/ East/ West, as specified by user 
-         */
-        private static CardinalDirection GetStartDirection()
-        {
-            var startDirection = ConfigurationManager.AppSettings["StartDirection"];
-            
-            if(!Enum.TryParse(startDirection, out CardinalDirection direction))            
-            {
-                Console.WriteLine("Error: Start direction must be one of North/ South/ East/ West.");
-                Environment.Exit(1);
-            }
-
-            Console.WriteLine("Start direction: {0}", direction.ToString());
-            return direction;
-        }
-
+       
         /*
          * Takes a single move command from the user. Either L/R/F/B. Stop if user presses ESC key.
          */

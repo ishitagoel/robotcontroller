@@ -1,4 +1,7 @@
-﻿namespace RobotController
+﻿using System.Configuration;
+
+namespace RobotController
 {
-    public abstract class Obstacle {}
+    public abstract class Obstacle 
+    {} 
 }
